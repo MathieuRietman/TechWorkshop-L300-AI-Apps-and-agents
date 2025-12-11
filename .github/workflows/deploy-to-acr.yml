@@ -10,7 +10,7 @@ on:
 
 env:
   REGISTRY_NAME: rgxk7jqpdjs5ccosureg  # Replace with your ACR name (e.g., myregistry)
-  IMAGE_NAME: zava-chat-app
+  IMAGE_NAME: chat-app
   IMAGE_TAG: ${{ github.sha }}
 
 jobs:
@@ -25,8 +25,9 @@ jobs:
         uses: docker/setup-buildx-action@v3
       
       - name: Create .env file from secret
+        working-directory: ./src
         run: |
-          echo "$ENV" > src/.env
+          echo "$ENV" > .env
           echo "✓ .env file created in src/ directory"
         shell: bash
         env:
@@ -40,16 +41,12 @@ jobs:
           password: ${{ secrets.ACR_PASSWORD }}
       
       - name: Build and push Docker image
-        uses: docker/build-push-action@v5
-        with:
-          context: ./src
-          file: ./src/Dockerfile
-          push: true
-          tags: |
-            ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
-            ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:latest
-          cache-from: type=registry,ref=${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:buildcache
-          cache-to: type=registry,ref=${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:buildcache,mode=max
+        run: |
+          cd src/
+          docker build -t ${{ env.AZURE_CONTAINER_REGISTRY }}/${{ env.IMAGE_NAME }}:latest .
+          docker tag ${{ env.AZURE_CONTAINER_REGISTRY }}/${{ env.IMAGE_NAME }}:latest  ${{ env.AZURE_CONTAINER_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+          docker push ${{ env.AZURE_CONTAINER_REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+
       
       - name: Clean up .env file
         if: always()
