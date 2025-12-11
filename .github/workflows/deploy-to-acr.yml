@@ -31,11 +31,12 @@ jobs:
           username: ${{ secrets.ACR_USERNAME }}
           password: ${{ secrets.ACR_PASSWORD }}
       
+
       - name: Create .env file from secret
-        working-directory: ./src
-        run: |
-          echo "${{ secrets.ENV }}" > .env
-          echo "✓ .env file created from GitHub secret (will not be committed)"
+        run: 'echo "$ENV" > src/.env'
+        shell: bash
+        env:
+          ENV: ${{ secrets.ENV }}
       
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
