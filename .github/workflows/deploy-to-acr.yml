@@ -43,9 +43,9 @@ jobs:
       - name: Build and push Docker image
         run: |
           cd src/
-          docker build -t ${{ env.AZURE_CONTAINER_REGISTRY }}/${{ env.IMAGE_NAME }}:latest .
-          docker tag ${{ env.AZURE_CONTAINER_REGISTRY }}/${{ env.IMAGE_NAME }}:latest  ${{ env.AZURE_CONTAINER_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
-          docker push ${{ env.AZURE_CONTAINER_REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+          docker build -t ${{ env.REGISTRY_NAME }}/${{ env.IMAGE_NAME }}:latest .
+          docker tag ${{ env.REGISTRY_NAME }}/${{ env.IMAGE_NAME }}:latest  ${{ env.REGISTRY_NAME }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+          docker push ${{ env.REGISTRY_NAME }}/${{ env.IMAGE_NAME }}:latest
 
       
       - name: Clean up .env file
