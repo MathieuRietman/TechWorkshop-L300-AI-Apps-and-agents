@@ -6,3 +6,37 @@ __pycache__/
 __pycache__/
 data/
 venv/
+
+# Environment files (NEVER include in image from source)
+.env
+.env.*
+env_sample.txt
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Documentation
+*.md
+README.md
+LICENSE
+
+# CI/CD
+.github/
